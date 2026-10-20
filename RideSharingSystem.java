@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class RideSharingSystem implements IRideSharingSystem {
     private RiderList riders;
     private DriverList drivers;
-    private RideList ridesa // revise here
+    private RideList rides; // revise here
 //reem:
   public RideSharingSystem() {
         riders = new RiderList();
