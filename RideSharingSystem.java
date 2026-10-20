@@ -66,5 +66,22 @@ public boolean removeDriver(int driverId) {
     }
 
 //Alanoud:
-
+    public boolean loadDriversFromCSV(String driversFilePath) {
+        try {
+            Scanner file = new Scanner(new File(driversFilePath));
+            while (file.hasNextLine()) {
+                String[] f = file.nextLine().split(",");
+                try {
+                    addDriver(new Driver(Integer.parseInt(f[0].trim()),
+                            f[1].trim(), f[2].trim(), f[3].trim(),
+                            VehicleType.valueOf(f[4].trim())));
+                } catch (Exception e) {
+                }
+            }
+            file.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+    }
 //Aljohara:
