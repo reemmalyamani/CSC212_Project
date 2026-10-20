@@ -44,4 +44,4 @@ public class Driver extends Person implements IDriver {
     public String toString() {
         return "Driver " + super.toString() + " | " + vehiclePlate + " | " + vehicleType;
     }
-} 
+}
