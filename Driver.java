@@ -39,7 +39,7 @@ public class Driver extends Person implements IDriver {
     }
 
     public int compareTo(IDriver other) {
-        return getId() - other.getId();
+        return Integer.compare(getId(), other.getId());
     }
 
     public String toString() {
