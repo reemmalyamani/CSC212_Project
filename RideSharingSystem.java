@@ -66,7 +66,7 @@ public boolean removeDriver(int driverId) {
     }
 
 //Alanoud:
-    public boolean loadDriversFromCSV(String driversFilePath) {
+  public boolean loadDriversFromCSV(String driversFilePath) {
         try {
             Scanner file = new Scanner(new File(driversFilePath));
             while (file.hasNextLine()) {
@@ -83,6 +83,42 @@ public boolean removeDriver(int driverId) {
         } catch (FileNotFoundException e) {
             return false;
         }
+    }
+
+    public boolean addDriver(IDriver driver) {
+        if (driver == null)
+            return false;
+        if (drivers.findByVehiclePlate(driver.getVehiclePlate()) != null)
+            return false;
+        return drivers.add(driver);
+    }
+
+    public IDriver searchDriverById(int driverId) {
+        return drivers.findById(driverId);
+    }
+
+    public IDriver searchDriverByVehiclePlate(String vehiclePlate) {
+        return drivers.findByVehiclePlate(vehiclePlate);
+    }
+
+    public LinkedList<IDriver> searchDriversByVehicleType(VehicleType vehicleType) {
+        return drivers.findByVehicleType(vehicleType);
+    }
+
+    public LinkedList<IDriver> getAllDrivers() {
+        return drivers.getAll();
+    }
+
+    public boolean removeDriver(int driverId) {
+        IDriver driver = drivers.findById(driverId);
+        if (driver == null)
+            return false;
+        LinkedList<IRide> h = driver.getRideHistory();
+        while (!h.empty()) {
+            h.findFirst();
+            deleteRide(h.retrieve());
+        }
+        return drivers.removeById(driverId);
     }
 //Aljohara:
 
