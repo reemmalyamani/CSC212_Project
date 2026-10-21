@@ -5,14 +5,14 @@ import java.util.Scanner;
 public class RideSharingSystem implements IRideSharingSystem {
     private RiderList riders;
     private DriverList drivers;
-    private RideList rides; // revise here
+    private RideList rides;
 //reem:
   public RideSharingSystem() {
         riders = new RiderList();
         drivers = new DriverList();
         rides = new RideList();
     }
-
+    
     public boolean loadRidersFromCSV(String ridersFilePath) {
         try {
             Scanner file = new Scanner(new File(ridersFilePath));
@@ -30,41 +30,55 @@ public class RideSharingSystem implements IRideSharingSystem {
         }
     }
 
-   public boolean addDriver(IDriver driver) {
-        if (driver == null)
+    public boolean addRider(IRider rider) {
+        if (rider == null)
             return false;
-        if (drivers.findByVehiclePlate(driver.getVehiclePlate()) != null)
+        if (riders.findByEmail(rider.getEmail()) != null)
             return false;
-        return drivers.add(driver);
+        return riders.add(rider);
     }
 
- public IDriver searchDriverById(int driverId) {
-        return drivers.findById(driverId);
-    }
-  public IDriver searchDriverByVehiclePlate(String vehiclePlate) {
-        return drivers.findByVehiclePlate(vehiclePlate);
+    public IRider searchRiderById(int riderId) {
+        return riders.findById(riderId);
     }
 
-    public LinkedList<IDriver> searchDriversByVehicleType(VehicleType vehicleType) {
-        return drivers.findByVehicleType(vehicleType);
+    public IRider searchRiderByEmail(String email) {
+        return riders.findByEmail(email);
     }
 
-public boolean removeDriver(int driverId) {
-        IDriver driver = drivers.findById(driverId);
-        if (driver == null)
+    public LinkedList<IRider> searchRidersByName(String fullName) {
+        return riders.findByName(fullName);
+    }
+
+    public LinkedList<IRider> searchRidersByHomeCity(String homeCity) {
+        return riders.findByHomeCity(homeCity);
+    }
+
+    public LinkedList<IRider> getAllRiders() {
+        return riders.getAll();
+    }
+
+    // removeRider() is incomplete and still needs to handle shared rides.
+    public boolean removeRider(int riderId) {
+        IRider rider = riders.findById(riderId);
+        if (rider == null)
             return false;
-        LinkedList<IRide> h = driver.getRideHistory();
+
+        LinkedList<IRide> h = rider.getRideHistory();
         while (!h.empty()) {
             h.findFirst();
-            deleteRide(h.retrieve());
+            IRide ride = h.retrieve();
+
+            if (ride instanceof PrivateRide) {
+                deleteRide(ride);
+            } else if (ride instanceof SharedRide) {
+                break;
+            }
         }
-        return drivers.removeById(driverId);
-    }
 
- public LinkedList<IDriver> getAllDrivers() {
-        return drivers.getAll();
+        return riders.removeById(riderId);
     }
-
+    
 //Alanoud:
   public boolean loadDriversFromCSV(String driversFilePath) {
         try {
