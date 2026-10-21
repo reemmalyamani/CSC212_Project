@@ -57,7 +57,37 @@ public class RideSharingSystem implements IRideSharingSystem {
     public LinkedList<IRider> getAllRiders() {
         return riders.getAll();
     }
+//  helper to delete NOT!! part of IRideSharingSystem
+private void deleteRide(IRide ride) {
+    rides.removeRideById(ride.getRideId());
 
+    if (ride.getDriver() != null)
+        removeFromHistory(ride.getDriver().getRideHistory(), ride);
+
+    if (ride instanceof IPrivateRide) {
+        removeFromHistory(((IPrivateRide) ride).getRider().getRideHistory(), ride);
+    } else if (ride instanceof ISharedRide) {
+        LinkedList<IRider> ps = ((ISharedRide) ride).getParticipants();
+        if (!ps.empty()) {
+            ps.findFirst();
+            while (true) {
+                removeFromHistory(ps.retrieve().getRideHistory(), ride);
+                if (ps.last()) break;
+                ps.findNext();
+            }
+        }
+    }
+}
+
+private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
+    if (h.empty()) return;
+    h.findFirst();
+    while (true) {
+        if (h.retrieve() == ride) { h.remove(); return; }
+        if (h.last()) return;
+        h.findNext();
+    }
+}
     // removeRider() is incomplete and still needs to handle shared rides.
     public boolean removeRider(int riderId) {
         IRider rider = riders.findById(riderId);
