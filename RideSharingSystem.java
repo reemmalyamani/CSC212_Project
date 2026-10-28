@@ -167,16 +167,16 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
 //Aljohara:
 @Override
    public LinkedList<IRide> getAllRidesAlphabetically(){
-      return rideList.getAllAlphabetically(); }
+      return this.rides.getAllAlphabetically(); }
  
    @Override
    public LinkedList<IRide> searchRidesByRiderName(String riderName) { 
-      return rideList.findByRiderName(riderName);}
+      return this.rides.findByRiderName(riderName);}
  
  
    @Override
    public LinkedList<IRide> searchRidesByPickupLocation(String pickupLocation) {
-      return rideList.findByPickupLocation(pickupLocation); }
+      return this.rides.findByPickupLocation(pickupLocation); }
 
    private boolean isOverlap(IDateTime start1, IDateTime end1, IDateTime start2,IDateTime end2) {
       return start1.compareTo(end2) < 0 && start2.compareTo(end1) < 0; }
@@ -197,8 +197,8 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
 
    @Override
    public boolean schedulePrivateRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime, String dropoffLocation, int riderId, int driverId){
-      IDriver driver = driverList.findById(driverId);
-      IRider rider = riderList.findById(riderId);
+      IDriver driver = this.drivers.findById(driverId);
+      IRider rider = this.riders.findById(riderId);
       if(rider==null || driver==null) {
          return false; }
       if(pickupTime == null || dropoffTime == null || pickupLocation == null || dropoffLocation == null) {
@@ -211,7 +211,7 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
          return false;}
    
       PrivateRide ride = new PrivateRide(pickupLocation,pickupTime,dropoffTime,dropoffLocation,driver,rider);
-      if(!rideList.addRide(ride)) {
+      if(!this.rides.addRide(ride)) {
          return false; }
       rider.getRideHistory().insert(ride);   
       driver.getRideHistory().insert(ride);   
@@ -219,7 +219,7 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
   
    @Override 
    public boolean scheduleSharedRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime, String dropoffLocation, int[] riderIds, int driverId){
-      IDriver driver = driverList.findById(driverId);
+      IDriver driver = this.drivers.findById(driverId);
       if(driver == null || riderIds == null || riderIds.length == 0 ) {
          return false;}
       if(pickupTime == null || dropoffTime == null ||pickupLocation == null || dropoffLocation == null) {
@@ -230,7 +230,7 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
    
       IRider [] riders = new IRider[riderIds.length];
       for(int i =0; i<riderIds.length; i++) {
-         riders[i]= riderList.findById(riderIds[i]);
+         riders[i]= this.riders.findById(riderIds[i]);
          if (riders [i] == null){
             return false;}
            
@@ -250,7 +250,7 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
       for(int i = 0; i < riders.length; i++) {
          if(!ride.addParticipant(riders[i])) {
             return false; }}
-      if(!rideList.addRide(ride)) {
+      if(!this.rides.addRide(ride)) {
          return false;} 
       
             
@@ -309,7 +309,7 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
                
    @Override
    public LinkedList<IRider> getSharedRideParticipants(String pickupLocation){
-      LinkedList<IRide> rides = rideList.findByPickupLocation(pickupLocation);
+      LinkedList<IRide> rides = this.rides.findByPickupLocation(pickupLocation);
       if (rides.empty()) {
          return new LinkedList<IRider>(); }
       rides.findFirst();
@@ -324,4 +324,3 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
             
             
 }//Class end
-
