@@ -102,7 +102,12 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
             if (ride instanceof PrivateRide) {
                 deleteRide(ride);
             } else if (ride instanceof SharedRide) {
-                break;
+                SharedRide sharedRide = (SharedRide) ride;
+                sharedRide.removeParticipantById(riderId);
+                removeFromHistory(h, ride);
+                if (sharedRide.isEmpty()) {
+                    deleteRide(ride);
+                }
             }
         }
 
