@@ -88,7 +88,6 @@ private void removeFromHistory(LinkedList<IRide> h, IRide ride) {
         h.findNext();
     }
 }
-    // removeRider() is incomplete and still needs to handle shared rides.
     public boolean removeRider(int riderId) {
         IRider rider = riders.findById(riderId);
         if (rider == null)
