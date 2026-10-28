@@ -8,6 +8,8 @@ public class RiderList implements IRiderList {
     }
 
     public boolean add(IRider rider) {
+        if (rider == null || findByEmail(rider.getEmail()) != null)
+            return false;
         if (head == null || rider.compareTo(head.data) < 0) {
             Node<IRider> tmp = new Node<IRider>(rider);
             tmp.next = head;
@@ -162,4 +164,3 @@ public class RiderList implements IRiderList {
         return size;
     }
 }
-
